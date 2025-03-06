@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="az">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR Kod Scanner</title>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+  </head>
+  <body>
+    <h1>QR Kod Scanner</h1>
+    <div id="reader" style="width: 300px"></div>
+    <p id="result"></p>
+
+    <script>
+      function sendToBackend(username) {
+        fetch("http://127.0.0.1:8000/api/scan_qr/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username: username }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("result").innerText = data.message;
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+
+      function onScanSuccess(qrCodeMessage) {
+        document.getElementById("result").innerText =
+          "Oxunan QR Kod: " + qrCodeMessage;
+        sendToBackend(qrCodeMessage);
+      }
+
+      let scanner = new Html5Qrcode("reader");
+      scanner.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: 250 },
+        onScanSuccess
+      );
+    </script>
+  </body>
+</html>
