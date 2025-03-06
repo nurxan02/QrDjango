@@ -1,44 +1,68 @@
 <!DOCTYPE html>
-<html lang="az">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>QR Kod Scanner</title>
-    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script
+      src="https://unpkg.com/html5-qrcode"
+      type="text/javascript"
+    ></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+      }
+      #reader {
+        width: 300px;
+        margin: auto;
+      }
+      #result {
+        margin-top: 20px;
+        font-size: 18px;
+        font-weight: bold;
+      }
+    </style>
   </head>
   <body>
     <h1>QR Kod Scanner</h1>
-    <div id="reader" style="width: 300px"></div>
-    <p id="result"></p>
+    <div id="reader"></div>
+    <p id="result">QR kodu skan edin...</p>
 
     <script>
-      function sendToBackend(username) {
-        fetch("http://127.0.0.1:8000/api/scan_qr/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username: username }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            document.getElementById("result").innerText = data.message;
-          })
-          .catch((error) => console.error("Error:", error));
-      }
-
-      function onScanSuccess(qrCodeMessage) {
+      function onScanSuccess(decodedText, decodedResult) {
         document.getElementById("result").innerText =
-          "Oxunan QR Kod: " + qrCodeMessage;
-        sendToBackend(qrCodeMessage);
+          "Oxunan QR: " + decodedText;
+        sendToServer(decodedText);
       }
-
-      let scanner = new Html5Qrcode("reader");
-      scanner.start(
+      let html5QrCode = new Html5Qrcode("reader");
+      html5QrCode.start(
         { facingMode: "environment" },
         { fps: 10, qrbox: 250 },
         onScanSuccess
       );
+
+      function sendToServer(qrData) {
+        let jsonData;
+        try {
+          jsonData = JSON.parse(qrData); // Əgər artıq JSON-dursa, parse et
+        } catch (error) {
+          jsonData = { username: qrData }; // Əgər mətn olsa, JSON-a çevir
+        }
+
+        fetch("http://127.0.0.1:8000/api/attendance/scan_qr/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(jsonData), // JSON formatında göndər
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            alert("Cavab: " + data.message);
+          })
+          .catch((error) => console.error("Xəta:", error));
+      }
     </script>
   </body>
 </html>
