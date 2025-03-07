@@ -38,9 +38,9 @@
       function sendToServer(qrData) {
         let jsonData;
         try {
-          jsonData = JSON.parse(qrData); // Əgər artıq JSON-dursa, parse et
+          jsonData = JSON.parse(qrData);
         } catch (error) {
-          jsonData = { username: qrData }; // Əgər mətn olsa, JSON-a çevir
+          jsonData = { username: qrData };
         }
 
         fetch("http://127.0.0.1:8000/api/attendance/scan_qr/", {
@@ -48,7 +48,7 @@
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(jsonData), // JSON formatında göndər
+          body: JSON.stringify(jsonData),
         })
           .then((response) => response.json())
           .then((data) => {
