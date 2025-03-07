@@ -3,31 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>QR Kod Scanner</title>
+    <title>QR Kod Scanner Demo</title>
+    <link rel="stylesheet" href="style.css" />
     <script
       src="https://unpkg.com/html5-qrcode"
       type="text/javascript"
     ></script>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        text-align: center;
-      }
-      #reader {
-        width: 300px;
-        margin: auto;
-      }
-      #result {
-        margin-top: 20px;
-        font-size: 18px;
-        font-weight: bold;
-      }
-    </style>
+    <style></style>
   </head>
   <body>
-    <h1>QR Kod Scanner</h1>
-    <div id="reader"></div>
-    <p id="result">QR kodu skan edin...</p>
+    <div class="container">
+      <div class="logo"><img src="./img/logo.webp" alt="" /></div>
+      <h1>Please Read Your Access QR</h1>
+      <div class="qrReader"><div id="reader"></div></div>
+      <div class="loading">
+        <p id="result">QR kodu skan edin</p>
+        <div class="loader"></div>
+      </div>
+    </div>
 
     <script>
       function onScanSuccess(decodedText, decodedResult) {
