@@ -1,9 +1,9 @@
-# Django model for Employee and Attendancepython manage.py makemigrations
 from django.db import models
 from django.contrib.auth.models import User
 import qrcode
 from io import BytesIO
 from django.core.files.base import ContentFile
+from django.utils import timezone
 
 class Employee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -22,7 +22,7 @@ class Employee(models.Model):
 
 class Attendance(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    check_in = models.DateTimeField(auto_now_add=True)
+    check_in = models.DateTimeField(default=timezone.now)
     check_out = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):

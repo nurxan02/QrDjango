@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>QR Kod Scanner Demo</title>
+    <title>QR Code Scanner | LifeDoc</title>
     <link rel="stylesheet" href="style.css" />
     <script
       src="https://unpkg.com/html5-qrcode"
@@ -12,50 +12,26 @@
     <style></style>
   </head>
   <body>
-    <div class="container">
-      <div class="logo"><img src="./img/logo.webp" alt="" /></div>
-      <h1>Please Read Your Access QR</h1>
-      <div class="qrReader"><div id="reader"></div></div>
-      <div class="loading">
-        <p id="result">QR kodu skan edin</p>
-        <div class="loader"></div>
+    <main>
+      <div class="container">
+        <div class="logo">
+          <img class="Logo" src="./img/logo.webp" alt="" />
+        </div>
+        <h1 id="headTitle">Please Read Your Access QR</h1>
+        <div class="qrReader"><div id="reader"></div></div>
+        <div class="loading">
+          <p id="result">Scaning the QR code</p>
+          <div class="loader"></div>
+        </div>
       </div>
-    </div>
-
-    <script>
-      function onScanSuccess(decodedText, decodedResult) {
-        document.getElementById("result").innerText =
-          "Oxunan QR: " + decodedText;
-        sendToServer(decodedText);
-      }
-      let html5QrCode = new Html5Qrcode("reader");
-      html5QrCode.start(
-        { facingMode: "environment" },
-        { fps: 10, qrbox: 250 },
-        onScanSuccess
-      );
-
-      function sendToServer(qrData) {
-        let jsonData;
-        try {
-          jsonData = JSON.parse(qrData);
-        } catch (error) {
-          jsonData = { username: qrData };
-        }
-
-        fetch("http://127.0.0.1:8000/api/attendance/scan_qr/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(jsonData),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            alert("Cavab: " + data.message);
-          })
-          .catch((error) => console.error("Xəta:", error));
-      }
-    </script>
+    </main>
+    <footer>
+      <p>
+        © All Rights Reserved. LifeDoc Company. Developed by
+        <a href="https://github.com/mutikn">Mutikn</a> &
+        <a href="https://github.com/nurxan02">nurxan02</a>
+      </p>
+    </footer>
+    <script src="./script.js"></script>
   </body>
 </html>
