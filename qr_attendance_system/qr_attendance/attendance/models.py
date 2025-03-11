@@ -27,3 +27,11 @@ class Attendance(models.Model):
 
     def __str__(self):
         return f"{self.employee.user.username} - {self.check_in}"
+    
+class Report(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    date = models.DateField(default=timezone.now)
+    message = models.TextField()
+
+    def __str__(self):
+        return f"{self.employee.user.username} - {self.date} - {self.message}"
